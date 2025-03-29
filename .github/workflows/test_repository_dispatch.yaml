@@ -1,9 +1,7 @@
-name: test (workflow_run)
+name: test (repository_dispatch)
 on:
-  workflow_run:
-    workflows: ["test-2"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [secure-action]
 jobs:
   server:
     runs-on: ubuntu-24.04
@@ -17,7 +15,7 @@ jobs:
           PAYLOAD: ${{ toJson(github.event) }}
       - uses: actions/download-artifact@v4
         with:
-          run-id: ${{github.event.workflow_run.id}}
+          run-id: ${{github.event.client_payload.workflow_run_id}}
           name: secure-action
           github-token: ${{ github.token }}
       - uses: szksh-lab/secure-action@latest
@@ -61,10 +59,10 @@ jobs:
           ops: ${{ toJson(fromJson(steps.validation.outputs.result).ops) }}
           github_token: ${{ github.token }}
 
-      - if: (failure() || !fromJson(steps.validation.outputs.result).valid) && steps.prepare.outputs.pull_request_number != ''
+      - if: (failure() || !fromJson(steps.validation.outputs.result).valid) && github.event.client_payload.pull_request_number != ''
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.prepare.outputs.pull_request_number }}
+          PR_NUMBER: ${{ github.event.client_payload.pull_request_number }}
           VALIDATION_RESULT: ${{ steps.validation.outputs.result }}
           COMMENT: |
             :x: [Workflow](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
