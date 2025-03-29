@@ -10,6 +10,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       issues: write
+      actions: read
     steps:
       - uses: actions/download-artifact@v4
         with:
