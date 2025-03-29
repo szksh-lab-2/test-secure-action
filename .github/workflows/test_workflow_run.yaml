@@ -38,7 +38,7 @@ jobs:
               errors: [],
             };
             for (const op of ops) {
-              if (op.handler !== 'octotik/rest.js') {
+              if (op.handler !== 'octokit/rest.js') {
                 result.valid = false;
                 result.errors.push({
                   message: `Unsupported handler: ${op.handler}`,
@@ -65,6 +65,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ steps.prepare.outputs.pull_request_number }}
+          VALIDATION_RESULT: ${{ steps.validation.outputs.result }}
           COMMENT: |
             :x: [Workflow](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
         run: |
