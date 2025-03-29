@@ -1,0 +1,16 @@
+---
+name: test
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: szksh-lab/secure-action@latest
+        with:
+          handler: github_api
+          method: rest.issues.createLabel
+          artifact_name: secure-action
+          data: |
+            owner: ${{github.event.repository.owner.login}}
+            repo: ${{github.event.repository.name}}
+            name: "test"

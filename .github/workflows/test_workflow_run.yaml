@@ -1,0 +1,24 @@
+name: test (workflow_run)
+on:
+  workflow_run:
+    workflows: ["test"]
+    types:
+      - completed
+jobs:
+  server:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/download-artifact@v4
+      - uses: szksh-lab/secure-action@latest
+        id: prepare
+        with:
+          action: server/prepare
+
+      - uses: szksh-lab/secure-action@latest
+        with:
+          action: server/apply
+          ops: ${{ steps.prepare.outputs.ops }}
+          github_token: ${{ github.token }}
