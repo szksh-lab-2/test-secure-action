@@ -24,7 +24,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/${$GITHUB_REPOSITORY}/dispatches" \
+            "/repos/${GITHUB_REPOSITORY}/dispatches" \
             -f "event_type=secure-action" \
             -F "client_payload[workflow_run_id]=$GITHUB_RUN_ID" \
             -F "client_payload[pull_request_number]=$PR_NUMBER"
