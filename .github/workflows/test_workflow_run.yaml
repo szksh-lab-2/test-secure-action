@@ -50,6 +50,10 @@ jobs:
             }
             return result;
 
+      - run: echo "$RESULT"
+        env:
+          RESULT: ${{ steps.validation.outputs.result }}
+
       - uses: szksh-lab/secure-action@latest
         if: toJson(fromJson(steps.validation.outputs.result).ops) != '[]'
         with:
