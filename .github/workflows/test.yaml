@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
+      contents: write
     steps:
       - uses: szksh-lab/secure-action@latest
         with:
