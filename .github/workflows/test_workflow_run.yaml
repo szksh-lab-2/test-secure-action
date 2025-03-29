@@ -25,21 +25,46 @@ jobs:
         with:
           action: server/prepare
 
+      - uses: actions/github-script@v7
+        id: validation
+        env:
+          OPS: ${{ steps.prepare.outputs.ops }}
+        with:
+          script: |
+            const ops = JSON.parse(process.env.OPS);
+            const result = {
+              ops: [],
+              valid: true,
+              errors: [],
+            };
+            for (const op of ops) {
+              if (op.handler !== 'octotik/rest.js') {
+                result.valid = false;
+                result.errors.push({
+                  message: `Unsupported handler: ${op.handler}`,
+                  op: op,
+                });
+                continue;
+              }
+              result.ops.push(op);
+            }
+            return result;
+
       - uses: szksh-lab/secure-action@latest
+        if: toJson(fromJson(steps.validation.outputs.result).ops) != '[]'
         with:
           action: server/apply
-          ops: ${{ steps.prepare.outputs.ops }}
+          ops: ${{ toJson(fromJson(steps.validation.outputs.result).ops) }}
           github_token: ${{ github.token }}
 
-      - if: failure() && steps.prepare.outputs.pull_request_number != ''
+      - if: (failure() || !fromJson(steps.validation.outputs.result).valid) && steps.prepare.outputs.pull_request_number != ''
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ steps.prepare.outputs.pull_request_number }}
           COMMENT: |
-            [Workflow](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+            :x: [Workflow](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
         run: |
           gh pr comment \
             -R "$GITHUB_REPOSITORY" \
             -b "${COMMENT}" \
             "$PR_NUMBER"
-
