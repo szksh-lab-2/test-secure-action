@@ -4,6 +4,8 @@ on: pull_request
 jobs:
   test:
     runs-on: ubuntu-24.04
+    permissions:
+      actions: write
     steps:
       - uses: szksh-lab/secure-action@latest
         with:
@@ -14,3 +16,15 @@ jobs:
             owner: ${{github.event.repository.owner.login}}
             repo: ${{github.event.repository.name}}
             name: "test"
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${$GITHUB_REPOSITORY}/dispatches" \
+            -f "event_type=secure-action" \
+            -F "client_payload[workflow_run_id]=$GITHUB_RUN_ID" \
+            -F "client_payload[pull_request_number]=$PR_NUMBER"
