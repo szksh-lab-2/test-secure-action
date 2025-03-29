@@ -25,7 +25,7 @@ jobs:
         with:
           action: server/prepare
 
-      - uses: szksh-lab/secure-action@pr/12
+      - uses: szksh-lab/secure-action@latest
         with:
           action: server/apply
           ops: ${{ steps.prepare.outputs.ops }}
