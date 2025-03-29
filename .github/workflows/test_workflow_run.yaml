@@ -16,6 +16,7 @@ jobs:
         with:
           run-id: ${{github.event.workflow_run.id}}
           name: secure-action
+          github-token: ${{ github.token }}
       - uses: szksh-lab/secure-action@latest
         id: prepare
         with:
