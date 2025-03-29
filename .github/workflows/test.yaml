@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: szksh-lab/secure-action@latest
         with:
-          handler: github_api
+          handler: octokit/rest.js
           method: rest.issues.createLabel
           artifact_name: secure-action
           data: |
