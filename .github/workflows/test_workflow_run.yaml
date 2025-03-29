@@ -12,6 +12,9 @@ jobs:
       issues: write
       actions: read
     steps:
+      - run: echo "$PAYLOAD"
+        env:
+          PAYLOAD: ${{ toJson(github.event) }}
       - uses: actions/download-artifact@v4
         with:
           run-id: ${{github.event.workflow_run.id}}
