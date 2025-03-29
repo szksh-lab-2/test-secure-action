@@ -12,6 +12,8 @@ jobs:
       issues: write
     steps:
       - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{github.event.workflow_run.id}}
       - uses: szksh-lab/secure-action@latest
         id: prepare
         with:
