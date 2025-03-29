@@ -25,8 +25,21 @@ jobs:
         with:
           action: server/prepare
 
-      - uses: szksh-lab/secure-action@pr/12
+      - uses: szksh-lab/secure-action@latest
         with:
           action: server/apply
           ops: ${{ steps.prepare.outputs.ops }}
           github_token: ${{ github.token }}
+
+      - if: failure() && steps.prepare.outputs.pull_request_number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.prepare.outputs.pull_request_number }}
+          COMMENT: |
+            [Workflow](${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}})
+        run: |
+          gh pr comment \
+            -R "$GITHUB_REPOSITORY" \
+            -b "${COMMENT}" \
+            "$PR_NUMBER"
+
