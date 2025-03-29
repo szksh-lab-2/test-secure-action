@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 15
     permissions:
       issues: write
-      actions: read
+      pull-requests: write
     steps:
       - run: echo "$PAYLOAD"
         env:
