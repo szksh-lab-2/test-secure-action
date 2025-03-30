@@ -68,3 +68,8 @@ jobs:
             -R "$GITHUB_REPOSITORY" \
             -b "${COMMENT}" \
             "$PR_NUMBER"
+
+      - if: always()
+        run: |
+          tree || :
+          ls
