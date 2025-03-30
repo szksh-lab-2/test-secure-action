@@ -4,8 +4,7 @@ on: pull_request
 jobs:
   test:
     runs-on: ubuntu-24.04
-    permissions:
-      issues: write
+    permissions: {}
     steps:
       - uses: szksh-lab/secure-action@latest
         with:
@@ -15,7 +14,15 @@ jobs:
             owner: ${{github.event.repository.owner.login}}
             repo: ${{github.event.repository.name}}
             name: "test"
+      
+      - uses: actions/create-github-app-token@v1
+        id: token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-issues: write
       - uses: szksh-lab/secure-action@latest
         with:
           action: trigger
           server_repository: test-secure-action
+          github_token: ${{ steps.token.outputs.token }}
