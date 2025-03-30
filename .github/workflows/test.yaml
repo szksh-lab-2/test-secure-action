@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions: {}
     steps:
+      - run: cat "$GITHUB_EVENT_PATH"
       - uses: szksh-lab/secure-action@latest
         with:
           handler: secure-action/action:octokit/rest.js
