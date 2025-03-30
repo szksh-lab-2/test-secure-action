@@ -1,7 +1,7 @@
 name: test (workflow_run)
 on:
   workflow_run:
-    workflows: ["test-2"]
+    workflows: ["test"]
     types:
       - completed
 jobs:
@@ -15,11 +15,6 @@ jobs:
       - run: echo "$PAYLOAD"
         env:
           PAYLOAD: ${{ toJson(github.event) }}
-      - uses: actions/download-artifact@v4
-        with:
-          run-id: ${{github.event.workflow_run.id}}
-          name: secure-action
-          github-token: ${{ github.token }}
       - uses: szksh-lab/secure-action@latest
         id: prepare
         with:
