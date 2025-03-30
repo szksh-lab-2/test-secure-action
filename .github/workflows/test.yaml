@@ -15,3 +15,7 @@ jobs:
             owner: ${{github.event.repository.owner.login}}
             repo: ${{github.event.repository.name}}
             name: "test"
+      - uses: szksh-lab/secure-action@latest
+        with:
+          action: trigger
+          server_repository: test-secure-action

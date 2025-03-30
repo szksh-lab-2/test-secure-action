@@ -1,11 +1,11 @@
-name: test (workflow_run)
+name: test (label)
 on:
-  workflow_run:
-    workflows: ["test-2"]
+  label:
     types:
-      - completed
+      - created
 jobs:
   server:
+    if: startsWith(github.event.label.name, "secure-action-label--")
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -73,3 +73,4 @@ jobs:
         run: |
           tree || :
           ls
+
