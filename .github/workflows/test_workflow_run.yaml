@@ -33,7 +33,7 @@ jobs:
               errors: [],
             };
             for (const op of ops) {
-              if (op.handler !== 'octokit/rest.js') {
+              if (op.handler !== 'secure-action/action:octokit/rest.js') {
                 result.valid = false;
                 result.errors.push({
                   message: `Unsupported handler: ${op.handler}`,
